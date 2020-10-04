@@ -16,12 +16,6 @@ git clone https://github.com/NexGenUA/nodejs-course
 cd nodejs-course/caesar_cli
 ```
 
-## Change branch
-
-```bash
-git checkout task-1
-```
-
 ## Installing NPM modules
 
 ```bash
