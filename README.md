@@ -13,7 +13,7 @@ git clone https://github.com/NexGenUA/nodejs-course
 ## Change directory
 
 ```bash
-cd nodejs-course
+cd nodejs-course/caesar_cli
 ```
 
 ## Change branch
@@ -38,15 +38,15 @@ npm install
 **Usage example:**
 
 ```bash
-$ node caesar_cli -a encode -s 7 -i "./input.txt" -o "./output.txt"
+$ node caesar -a encode -s 7 -i "./input.txt" -o "./output.txt"
 ```
 
 ```bash
-$ node caesar_cli --action encode --shift 7 --input plain.txt --output encoded.txt
+$ node caesar --action encode --shift 7 --input plain.txt --output encoded.txt
 ```
 
 ```bash
-$ node caesar_cli --action decode --shift 7 --input decoded.txt --output plain.txt
+$ node caesar --action decode --shift 7 --input decoded.txt --output plain.txt
 ```
 
 > input.txt
