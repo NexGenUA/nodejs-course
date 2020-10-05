@@ -53,7 +53,7 @@ const inputStream = () => {
 
 const outputStream = () => {
   if (output) {
-    const ws = fs.createWriteStream(path.join(__dirname, '..', output), {
+    const ws = fs.createWriteStream(path.resolve(__dirname, '..', output), {
       flags: 'a'
     });
 

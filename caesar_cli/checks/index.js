@@ -11,8 +11,8 @@ const { input, output } = params;
 const checks = async () => {
   try {
     if (output) {
-      await open(output, 'a');
       await access(output, fs.constants.W_OK);
+      await open(output, 'a');
     }
 
     if (input) {
@@ -20,7 +20,7 @@ const checks = async () => {
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
-      throw new Error(`Error: File ${err.path} doesn't exist`);
+      throw new Error(`Error: File "${err.path}" doesn't exist`);
     }
     throw new Error(`Error: Access denied to file "${err.path}"`);
   }
