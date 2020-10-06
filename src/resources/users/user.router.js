@@ -29,16 +29,11 @@ router.route('/:id').put(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  const user = await usersService.deleteUser(req.id);
+  const user = await usersService.deleteUser(req.params.id);
   if (user) {
     res.status(200).send('Succefull deleted');
   }
   res.status(404).send();
 });
-
-// * `GET /users/:id` - get the user by id (ex. “/users/123”) (remove password from response)
-// * `POST /users` - create user
-// * `PUT /users/:id` - update user
-// * `DELETE /users/:id` - delete user
 
 module.exports = router;
