@@ -1,38 +1,47 @@
 const router = require('express').Router();
+const status = require('http-status');
+
+const middlewareFn = require('../../shared/middleware-fn');
 const boardsService = require('./board.service');
 
-router.route('/').get(async (req, res) => {
-  const boards = await boardsService.getAll();
-  res.json(boards);
-});
+router.route('/').get(
+  middlewareFn(async (req, res, next) => {
+    const boards = await boardsService.getAll();
+    await res.json(boards);
+    next();
+  })
+);
 
-router.route('/:id').get(async (req, res) => {
-  const board = await boardsService.getBoard(req.params.id);
-  if (board) {
-    return res.json(board);
-  }
-  res.status(404).send('board not found');
-});
+router.route('/:id').get(
+  middlewareFn(async (req, res, next) => {
+    const board = await boardsService.getOneById(req.params.id);
+    await res.json(board);
+    next();
+  })
+);
 
-router.route('/').post(async (req, res) => {
-  const board = await boardsService.createBoard(req.body);
-  res.json(board);
-});
+router.route('/').post(
+  middlewareFn(async (req, res, next) => {
+    const board = await boardsService.create(req.body);
+    await res.status(status.OK).json(board);
+    next();
+  })
+);
 
-router.route('/:id').put(async (req, res) => {
-  const board = await boardsService.updateBoard(req.params.id, req.body);
-  if (board) {
-    return res.json(board);
-  }
-  res.status(404).send('Not Found');
-});
+router.route('/:id').put(
+  middlewareFn(async (req, res, next) => {
+    const board = await boardsService.updateOneById(req.params.id, req.body);
+    await res.json(board);
+    next();
+  })
+);
 
-router.route('/:id').delete(async (req, res) => {
-  const board = await boardsService.deleteBoard(req.params.id);
-  if (board) {
-    res.status(200).send('Succefull deleted');
-  }
-  res.status(404).send();
-});
+router.route('/:id').delete(
+  middlewareFn(async (req, res, next) => {
+    await boardsService.deleteOneById(req.params.id);
+    await res.sendStatus(status.NO_CONTENT);
+    next();
+  })
+);
 
 module.exports = router;

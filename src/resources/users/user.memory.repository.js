@@ -1,38 +1,36 @@
+const { NOT_FOUND } = require('http-status');
+
 const User = require('./user.model');
+const { ResponseError } = require('../../shared/catch-error');
 
 let users = [];
 
-const getAll = async () => users;
+const getAll = async () => await users;
 
-const getUser = id => users.find(user => user.id === id);
-
-const createUser = data => {
-  const newUser = new User(data);
-  users.push(newUser);
-  return newUser;
-};
-
-const updateUser = (id, data) => {
-  const findUser = getUser(id);
-  let updatedUser = null;
-  if (findUser) {
-    users = users.map(user => {
-      if (user.id === id) {
-        updatedUser = { ...findUser, ...data };
-        return updatedUser;
-      }
-      return user;
-    });
+const getOneById = async id => {
+  const response = users.find(user => user.id === id);
+  if (response) {
+    return response;
   }
-  return updatedUser;
+  throw new ResponseError(NOT_FOUND);
 };
 
-const deleteUser = id => {
-  const deletedUser = getUser(id);
-  if (deletedUser) {
-    users = users.filter(user => user.id !== id);
-  }
-  return deleteUser;
+const create = async data => {
+  const newData = new User(data);
+  users.push(newData);
+  return newData;
 };
 
-module.exports = { getAll, getUser, createUser, updateUser, deleteUser };
+const updateOneById = async (id, data) => {
+  const res = await getOneById(id);
+  users = users.map(user => (user.id === id ? { ...res, ...data } : user));
+  return true;
+};
+
+const deleteOneById = async id => {
+  await getOneById(id);
+  users = users.filter(user => user.id !== id);
+  return true;
+};
+
+module.exports = { getAll, getOneById, create, updateOneById, deleteOneById };
