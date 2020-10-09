@@ -23,8 +23,9 @@ const create = async data => {
 
 const updateOneById = async (id, data) => {
   const res = await getOneById(id);
-  users = users.map(user => (user.id === id ? { ...res, ...data } : user));
-  return true;
+  const newData = { ...res, ...data };
+  users = users.map(user => (user.id === id ? newData : user));
+  return newData;
 };
 
 const deleteOneById = async id => {
