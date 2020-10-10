@@ -1,10 +1,17 @@
 const usersRepo = require('./user.memory.repository');
+const tasksService = require('../tasks/task.service');
 
-const getAll = async () => await usersRepo.getAll();
-const getOneById = async id => await usersRepo.getOneById(id);
+const find = async () => await usersRepo.find();
+
+const findById = async id => await usersRepo.findById(id);
+
 const create = async data => await usersRepo.create(data);
-const updateOneById = async (id, data) =>
-  await usersRepo.updateOneById(id, data);
-const deleteOneById = async id => await usersRepo.deleteOneById(id);
 
-module.exports = { getAll, getOneById, create, updateOneById, deleteOneById };
+const updateOne = async (id, data) => await usersRepo.updateOne(id, data);
+
+const deleteOne = async id => {
+  await tasksService.updateMany(id);
+  await usersRepo.deleteOne(id);
+};
+
+module.exports = { find, findById, create, updateOne, deleteOne };

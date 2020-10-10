@@ -5,9 +5,9 @@ const { ResponseError } = require('../../shared/catch-error');
 
 let users = [];
 
-const getAll = async () => await users;
+const find = async () => users;
 
-const getOneById = async id => {
+const findById = async id => {
   const response = users.find(user => user.id === id);
   if (response) {
     return response;
@@ -21,17 +21,16 @@ const create = async data => {
   return newData;
 };
 
-const updateOneById = async (id, data) => {
-  const res = await getOneById(id);
+const updateOne = async (id, data) => {
+  const res = await findById(id);
   const newData = { ...res, ...data };
   users = users.map(user => (user.id === id ? newData : user));
   return newData;
 };
 
-const deleteOneById = async id => {
-  await getOneById(id);
+const deleteOne = async id => {
+  await findById(id);
   users = users.filter(user => user.id !== id);
-  return true;
 };
 
-module.exports = { getAll, getOneById, create, updateOneById, deleteOneById };
+module.exports = { find, findById, create, updateOne, deleteOne };

@@ -5,10 +5,10 @@ const { ResponseError } = require('../../shared/catch-error');
 
 let tasks = [];
 
-const getAllById = async boardId =>
+const findById = async boardId =>
   tasks.filter(task => task.boardId === boardId);
 
-const getOneById = async (boardId, id) => {
+const findByBoardIdAndId = async (boardId, id) => {
   const res = tasks.find(task => task.id === id && task.boardId === boardId);
   if (res) {
     return res;
@@ -22,8 +22,8 @@ const create = async (data, boardId) => {
   return newData;
 };
 
-const updateOneById = async (boardId, taskId, data) => {
-  const res = await getOneById(boardId, taskId);
+const updateOne = async (boardId, taskId, data) => {
+  const res = await findByBoardIdAndId(boardId, taskId);
   const newData = { ...res, ...data };
   tasks = tasks.map(task =>
     task.id === taskId && task.boardId === boardId ? newData : task
@@ -31,22 +31,27 @@ const updateOneById = async (boardId, taskId, data) => {
   return newData;
 };
 
-const deleteOne = async (boardId, taskId) => {
-  await getOneById(boardId, taskId);
-  tasks = tasks.filter(task => task.id === taskId);
-  return true;
+const deleteOne = async (boardId, id) => {
+  await findByBoardIdAndId(boardId, id, true);
+  tasks = tasks.filter(task => task.id !== id);
 };
 
-// // const deleteUser = id => tasksRepo.deleteUser(id);
+const updateMany = async userId => {
+  tasks = tasks.map(task =>
+    task.userId === userId ? { ...task, userId: null } : task
+  );
+};
 
-// const deleteManyById = id => tasksRepo.deleteManyById(id);
+const deleteMany = async boardId => {
+  tasks = tasks.filter(task => task.boardId !== boardId);
+};
 
 module.exports = {
-  getAllById,
-  getOneById,
+  findById,
+  findByBoardIdAndId,
   create,
-  updateOneById,
-  deleteOne
-  // deleteUser,
-  // deleteManyById
+  updateOne,
+  deleteOne,
+  updateMany,
+  deleteMany
 };

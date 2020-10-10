@@ -6,7 +6,7 @@ const boardsService = require('./board.service');
 
 router.route('/').get(
   middlewareFn(async (req, res, next) => {
-    const boards = await boardsService.getAll();
+    const boards = await boardsService.find();
     await res.json(boards);
     next();
   })
@@ -14,7 +14,7 @@ router.route('/').get(
 
 router.route('/:id').get(
   middlewareFn(async (req, res, next) => {
-    const board = await boardsService.getOneById(req.params.id);
+    const board = await boardsService.findById(req.params.id);
     await res.json(board);
     next();
   })
@@ -30,7 +30,7 @@ router.route('/').post(
 
 router.route('/:id').put(
   middlewareFn(async (req, res, next) => {
-    const board = await boardsService.updateOneById(req.params.id, req.body);
+    const board = await boardsService.updateOne(req.params.id, req.body);
     await res.json(board);
     next();
   })
@@ -38,7 +38,7 @@ router.route('/:id').put(
 
 router.route('/:id').delete(
   middlewareFn(async (req, res, next) => {
-    await boardsService.deleteOneById(req.params.id);
+    await boardsService.deleteOne(req.params.id);
     await res.sendStatus(status.NO_CONTENT);
     next();
   })

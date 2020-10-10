@@ -5,9 +5,9 @@ const { ResponseError } = require('../../shared/catch-error');
 
 let boards = [];
 
-const getAll = async () => await boards;
+const find = async () => await boards;
 
-const getOneById = async id => {
+const findById = async id => {
   const response = boards.find(board => board.id === id);
   if (response) {
     return response;
@@ -21,17 +21,16 @@ const create = async data => {
   return newData;
 };
 
-const updateOneById = async (id, data) => {
-  const res = await getOneById(id);
+const updateOne = async (id, data) => {
+  const res = await findById(id);
   const newData = { ...res, ...data };
   boards = boards.map(board => (board.id === id ? newData : board));
   return newData;
 };
 
-const deleteOneById = async id => {
-  await getOneById(id);
+const deleteOne = async id => {
+  await findById(id);
   boards = boards.filter(board => board.id !== id);
-  return true;
 };
 
-module.exports = { getAll, getOneById, create, updateOneById, deleteOneById };
+module.exports = { find, findById, create, updateOne, deleteOne };

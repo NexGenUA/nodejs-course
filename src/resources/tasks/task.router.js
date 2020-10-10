@@ -6,7 +6,7 @@ const tasksService = require('./task.service');
 
 router.route('/').get(
   middlewareFn(async (req, res, next) => {
-    const tasks = await tasksService.getAllById(req.params.boardId);
+    const tasks = await tasksService.findById(req.params.boardId);
     await res.json(tasks);
     next();
   })
@@ -14,7 +14,7 @@ router.route('/').get(
 
 router.route('/:taskId').get(
   middlewareFn(async (req, res, next) => {
-    const task = await tasksService.getOneById(
+    const task = await tasksService.findByBoardIdAndId(
       req.params.boardId,
       req.params.taskId
     );
@@ -33,7 +33,7 @@ router.route('/').post(
 
 router.route('/:taskId').put(
   middlewareFn(async (req, res, next) => {
-    const task = await tasksService.updateOneById(
+    const task = await tasksService.updateOne(
       req.params.boardId,
       req.params.taskId,
       req.body
@@ -45,7 +45,7 @@ router.route('/:taskId').put(
 
 router.route('/:taskId').delete(
   middlewareFn(async (req, res, next) => {
-    await tasksService.deleteManyById(req.params.boardId, req.params.taskId);
+    await tasksService.deleteOne(req.params.boardId, req.params.taskId);
     await res.sendStatus(status.NO_CONTENT);
     next();
   })
