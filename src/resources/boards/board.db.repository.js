@@ -18,12 +18,10 @@ const create = async data => {
 };
 
 const updateOne = async (id, data) => {
-  await findById(id);
   return Board.updateOne({ _id: id }, data);
 };
 
 const deleteOne = async id => {
-  await findById(id);
   await Board.deleteOne({ _id: id });
 };
 

@@ -18,12 +18,10 @@ const create = async data => {
 };
 
 const updateOne = async (id, data) => {
-  await findById(id);
   return User.updateOne({ _id: id }, data);
 };
 
 const deleteOne = async id => {
-  await findById(id);
   await User.deleteOne({ _id: id });
 };
 
