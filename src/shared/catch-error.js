@@ -1,21 +1,52 @@
-const httpStatus = require('http-status');
+const status = require('http-status');
+
+const { uncaughtLogger, unhandledLogger } = require('./logger');
+const { getProps } = require('../tools/pretty-print');
 
 class ResponseError extends Error {
-  constructor(status, ...rest) {
+  constructor(statusCode, ...rest) {
     super(...rest);
-    this.status = status;
+    this.statusCode = statusCode;
+    this.text = status[statusCode];
   }
 }
 
 const catchError = (err, req, res, next) => {
   if (err instanceof ResponseError) {
-    res.status(err.status).send(httpStatus[err.status]);
+    res.status(err.statusCode).send(err.text);
   } else if (err) {
+    req.stack = err;
     res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .send(httpStatus[httpStatus.INTERNAL_SERVER_ERROR]);
+      .status(status.INTERNAL_SERVER_ERROR)
+      .send(status[status.INTERNAL_SERVER_ERROR]);
   }
   next();
 };
+
+process.on('uncaughtException', err => {
+  uncaughtLogger(
+    {
+      type: 'uncaughtException',
+      msg: 'OMG! Something went wrong... Server crashed. Call to admin.',
+      stack: err
+    },
+    err.message
+  );
+});
+
+process.on('unhandledRejection', reason => {
+  unhandledLogger(
+    {
+      message: {
+        type: 'unhandledRejection',
+        msg: reason.message,
+        stack: getProps(reason)
+      },
+      level: 'error',
+      timestamp: new Date().toISOString()
+    },
+    reason.message
+  );
+});
 
 module.exports = { catchError, ResponseError };
