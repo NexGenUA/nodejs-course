@@ -1,14 +1,14 @@
 const { NOT_FOUND } = require('http-status');
 
-const User = require('./user.model');
+const Board = require('./board.model');
 const { ResponseError } = require('../../shared/catch-error');
 
-let users = [];
+let boards = [];
 
-const find = async () => users;
+const find = async () => await boards;
 
 const findById = async id => {
-  const response = users.find(user => user.id === id);
+  const response = boards.find(board => board.id === id);
   if (response) {
     return response;
   }
@@ -16,21 +16,21 @@ const findById = async id => {
 };
 
 const create = async data => {
-  const newData = new User(data);
-  users.push(newData);
+  const newData = new Board(data);
+  boards.push(newData);
   return newData;
 };
 
 const updateOne = async (id, data) => {
   const res = await findById(id);
   const newData = { ...res, ...data };
-  users = users.map(user => (user.id === id ? newData : user));
+  boards = boards.map(board => (board.id === id ? newData : board));
   return newData;
 };
 
 const deleteOne = async id => {
   await findById(id);
-  users = users.filter(user => user.id !== id);
+  boards = boards.filter(board => board.id !== id);
 };
 
 module.exports = { find, findById, create, updateOne, deleteOne };
