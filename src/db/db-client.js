@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
+
 const { MONGO_CONNECTION_STRING } = require('../common/config');
+const User = require('../resources/users/user.model');
+const admin = new User({ name: 'Admin', login: 'admin', password: 'admin' });
 
 const mongoConnect = () => {
   return new Promise((resolve, reject) => {
@@ -14,6 +17,8 @@ const mongoConnect = () => {
 
     db.once('open', async () => {
       console.log('mongoDB connected!');
+      await db.dropDatabase();
+      await admin.save();
       resolve();
     });
   });
