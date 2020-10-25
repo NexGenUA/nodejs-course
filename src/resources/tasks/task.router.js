@@ -1,13 +1,14 @@
 const router = require('express').Router({ mergeParams: true });
 const status = require('http-status');
 
+const Task = require('./task.model');
 const middlewareFn = require('../../shared/middleware-fn');
 const tasksService = require('./task.service');
 
 router.route('/').get(
   middlewareFn(async (req, res, next) => {
     const tasks = await tasksService.findById(req.params.boardId);
-    await res.json(tasks);
+    await res.json(tasks.map(Task.toResponse));
     next();
   })
 );
@@ -18,7 +19,7 @@ router.route('/:taskId').get(
       req.params.boardId,
       req.params.taskId
     );
-    await res.json(task);
+    await res.json(Task.toResponse(task));
     next();
   })
 );
@@ -26,7 +27,7 @@ router.route('/:taskId').get(
 router.route('/').post(
   middlewareFn(async (req, res, next) => {
     const task = await tasksService.create(req.body, req.params.boardId);
-    await res.json(task);
+    await res.json(Task.toResponse(task));
     next();
   })
 );
@@ -38,7 +39,7 @@ router.route('/:taskId').put(
       req.params.taskId,
       req.body
     );
-    await res.json(task);
+    await res.json(Task.toResponse(task));
     next();
   })
 );
