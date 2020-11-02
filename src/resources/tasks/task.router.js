@@ -8,7 +8,7 @@ const tasksService = require('./task.service');
 router.route('/').get(
   middlewareFn(async (req, res, next) => {
     const tasks = await tasksService.findById(req.params.boardId);
-    await res.json(tasks.map(Task.toResponse));
+    res.json(tasks.map(Task.toResponse));
     next();
   })
 );
@@ -19,7 +19,7 @@ router.route('/:taskId').get(
       req.params.boardId,
       req.params.taskId
     );
-    await res.json(Task.toResponse(task));
+    res.json(Task.toResponse(task));
     next();
   })
 );
@@ -27,7 +27,7 @@ router.route('/:taskId').get(
 router.route('/').post(
   middlewareFn(async (req, res, next) => {
     const task = await tasksService.create(req.body, req.params.boardId);
-    await res.json(Task.toResponse(task));
+    res.json(Task.toResponse(task));
     next();
   })
 );
@@ -39,7 +39,7 @@ router.route('/:taskId').put(
       req.params.taskId,
       req.body
     );
-    await res.json(Task.toResponse(task));
+    res.json(Task.toResponse(task));
     next();
   })
 );
@@ -47,7 +47,7 @@ router.route('/:taskId').put(
 router.route('/:taskId').delete(
   middlewareFn(async (req, res, next) => {
     await tasksService.deleteOne(req.params.boardId, req.params.taskId);
-    await res.sendStatus(status.NO_CONTENT);
+    res.sendStatus(status.NO_CONTENT);
     next();
   })
 );

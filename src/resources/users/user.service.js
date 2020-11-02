@@ -1,17 +1,19 @@
 const usersRepo = require('./user.db.repository');
 const tasksService = require('../tasks/task.service');
 
-const find = async () => await usersRepo.find();
+const find = () => usersRepo.find();
 
-const findById = async id => await usersRepo.findById(id);
+const findById = id => usersRepo.findById(id);
 
-const create = async data => await usersRepo.create(data);
+const findOne = login => usersRepo.findOne(login);
 
-const updateOne = async (id, data) => await usersRepo.updateOne(id, data);
+const create = data => usersRepo.create(data);
+
+const updateOne = (id, data) => usersRepo.updateOne(id, data);
 
 const deleteOne = async id => {
   await tasksService.updateMany(id);
   await usersRepo.deleteOne(id);
 };
 
-module.exports = { find, findById, create, updateOne, deleteOne };
+module.exports = { find, findById, create, updateOne, deleteOne, findOne };
