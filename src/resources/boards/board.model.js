@@ -16,12 +16,9 @@ class Column {
 const boardSchema = new mongoose.Schema(
   {
     title: String,
-    _columns: [],
-    get columns() {
-      return this._columns;
-    },
-    set columns(columsCollection) {
-      this._columns = columsCollection.map(Column.create);
+    columns: {
+      type: Array,
+      set: columns => columns.map(Column.create)
     },
     _id: {
       type: String,
