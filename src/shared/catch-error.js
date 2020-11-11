@@ -7,7 +7,7 @@ class ResponseError extends Error {
   constructor(statusCode, ...rest) {
     super(...rest);
     this.statusCode = statusCode;
-    this.text = status[statusCode];
+    this.text = rest[0] || status[statusCode];
   }
 }
 

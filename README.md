@@ -1,4 +1,6 @@
-# RS School REST service
+# RS School REST service (trello)
+
+## Documentation [https://winged-octagon-287518.oa.r.appspot.com/doc/](https://winged-octagon-287518.oa.r.appspot.com/doc/)
 
 ## Prerequisites
 
@@ -8,7 +10,9 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone git@github.com:NexGenUA/nodejs-course.git
+or
+git clone https://github.com/NexGenUA/nodejs-course.git
 ```
 
 ## Installing NPM modules
@@ -31,28 +35,11 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests
 
-```
-npm test
-```
-
-To run only one of all test suites (users, boards or tasks)
-
-```
-npm test <suite name>
-```
-
-To run all test with authorization
 
 ```
 npm run test:auth
-```
-
-To run only specific test suite with authorization (users, boards or tasks)
-
-```
-npm run test:auth <suite name>
 ```
 
 ## Development

@@ -9,9 +9,13 @@ router
   .route('/*')
   .post(
     middlewareFn(async (req, res, next) => {
-      const { login, password } = req.body;
-      const token = await authService.getToken(login, password);
-      res.json({ token });
+      const { login, password, email } = req.body;
+      const { token, name, email: responseEmail } = await authService.getToken(
+        login,
+        password,
+        email
+      );
+      res.json({ token, name, email: responseEmail });
       next();
     })
   )

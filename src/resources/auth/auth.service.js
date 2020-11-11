@@ -6,20 +6,21 @@ const { ResponseError } = require('../../shared/catch-error');
 const { JWT_SECRET_KEY } = require('../../common/config');
 const { compare } = require('../../shared/crypt');
 
-const getToken = async (login, password) => {
+const getToken = async (login, password, email) => {
+  login = login || email;
   const entity = await usersService.findOne(login);
   const isCorrectPassword = await compare(password, entity.password);
 
   if (isCorrectPassword) {
     const token = jwt.sign(
-      { name: entity._id, login: entity.login },
+      { id: entity._id, login: entity.login },
       JWT_SECRET_KEY,
-      { expiresIn: '1m' }
+      { expiresIn: '60m' }
     );
-    return token;
+    return { token, name: entity.name, email: entity.login };
   }
 
-  throw new ResponseError(FORBIDDEN);
+  throw new ResponseError(FORBIDDEN, 'Login or password is wrong');
 };
 
 const verify = (url, permittedPaths, authorization) => {

@@ -1,4 +1,4 @@
-const { NOT_FOUND, FORBIDDEN } = require('http-status');
+const { NOT_FOUND, FORBIDDEN, BAD_REQUEST } = require('http-status');
 
 const User = require('./user.model');
 const { ResponseError } = require('../../shared/catch-error');
@@ -18,15 +18,23 @@ const findOne = async login => {
   if (response) {
     return response;
   }
-  throw new ResponseError(FORBIDDEN);
+  throw new ResponseError(FORBIDDEN, 'Login or password is wrong');
 };
 
 const create = async data => {
-  return User.create(data);
+  const login = data.login || data.email;
+  const response = await User.findOne({ login });
+  if (response) {
+    throw new ResponseError(
+      BAD_REQUEST,
+      `User with login: ${login} already exists`
+    );
+  }
+  return User.create({ ...data, email: login });
 };
 
 const updateOne = async (id, data) => {
-  return User.updateOne({ _id: id }, data);
+  return await User.findOneAndUpdate({ _id: id }, data, { new: true });
 };
 
 const deleteOne = async id => {

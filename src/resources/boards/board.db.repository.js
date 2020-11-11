@@ -18,7 +18,7 @@ const create = async data => {
 };
 
 const updateOne = async (id, data) => {
-  return Board.updateOne({ _id: id }, data);
+  return await Board.findByIdAndUpdate(id, data, { new: true });
 };
 
 const deleteOne = async id => {

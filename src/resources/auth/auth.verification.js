@@ -6,6 +6,9 @@ const middlewareFn = require('../../shared/middleware-fn');
 
 router.route('*').all(
   middlewareFn(async (req, res, next) => {
+    if (req.url === '/users' && req.method === 'POST') {
+      return next();
+    }
     const paths = PERMITTED_PATHS.split(',');
     const url = req.url.split('/')[1];
     const { authorization } = req.headers;
